@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Article;
 use App\User;
+use Validator;
 
 class ApiController extends Controller
 {
@@ -27,7 +28,20 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),['title'=>'required']);
+        if ($validator->fails()) {
+            //greska
+            $response = array('response'=>$validator->messages(), 'success'=>false);
+            return $response;
+        }else{
+            //kreiranje clanka
+            $article = new Article;
+            $article->title = $request->input('title');
+            $article->content = $request->input('content');
+            $article->save();
+ 
+            return response()->json($article);
+        }
     }
 
     /**
@@ -61,6 +75,11 @@ class ApiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = Article::find($id);
+        $article->delete();
+
+        $response = array('response'=>'Article deleted','success'=>true, 'id' => $id);
+
+        return $response;
     }
 }

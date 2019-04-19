@@ -16,9 +16,11 @@ Route::get('/', function () {
 });
 
 
+Route::resource('api/articles','ApiController');
+
 Route::get('articles','PagesController@allArticles');
 
-Route::get('profile','PagesController@profile');
+Route::get('profile','PagesController@profile')->middleware('auth');
 
 Auth::routes();
 

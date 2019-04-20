@@ -7,18 +7,22 @@
 <form id="articleForm" enctype="multipart/form-data">
         <div class="form-group">
             <label>Title</label>
-            <input type="text" id="title" class="form-control">
+            <input type="text" id="title" name="title" class="form-control">
         </div>
         <div class="form-group">
             <label>Content</label>
-            <textarea id="content" class="form-control"></textarea>
+            <textarea id="content" name="content" class="form-control"></textarea>
         </div>
         <div class="form-group">
         <label>Photo</label><br>
         <input type="file" id="photo" name="photo">
+        <input type="hidden" value="">
         </div>
         <input type="submit" value="Submit" class="btn btn-primary">
 </form>
+
+
+
 <h1>My Articles</h1>
 @endsection
 
@@ -43,13 +47,13 @@
                 $.each(articles, function(key, article){
                     
                     output+= `
-                        <li id="test${article.id}" class="list-group-item">
+                    <li id="test${article.id}" class="list-group-item">
                             <a href="/api/articles/${article.id}">    
                                 <strong>${article.title}</strong> 
                                 <p>${article.content}</p>
-                            </a>  
-                            <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
-                            <button class="editLink  btn btn-primary" data-id="${article.id}">Edit</button>
+                            </a>
+                            <img src="{{asset('storage/article_images/${article.photo}')}}">
+                            <p>Author: ${article.username}</p>
                         </li>
                     `;
                 });
@@ -66,33 +70,41 @@
             e.preventDefault();
             let title = $('#title').val();
             let content = $('#content').val();
-            
-
-            addArticle(title,content);
+          //  let photo = $('input#photo')[0].files[0]//.name;  
+         //let photo = $('#photo').prop('files')[0];    
+         var formData = new FormData(this);
+     
+//console.log(photo);
+           addArticle(title, content, formData);
         });
 
              //dodavanje clanka kroz API
-             function  addArticle(title,content){
+             function  addArticle(title, content, formData){
             $.ajax({
                 method: 'POST',
                 url: 'http://zadatak.test/api/articles',
-                data:{title:title,content:content}
-            }).done(function(article){
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData
+            }).done(function(response){
                 let output = `
-                        <li class="list-group-item" id="test${article.id}">
+                        <li class="list-group-item" id="test${response.article.id}">
                             <a href="">
-                                <strong>${article.title}</strong> 
-                                <p>${article.content}</p>
-                                <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
-                                <button class="editLink  btn btn-primary" data-id="${article.id}">Edit</button>
+                                <strong>${response.article.title}</strong> 
+                                <p>${response.article.content}</p>
+                                <button class="deleteLink btn btn-danger" data-id="${response.article.id}">Delete</button>
+                                <button class="editLink  btn btn-primary" data-id="${response.article.id}">Edit</button>
                             </a>
+                            <img src="{{asset('storage/article_images/${response.article.photo}')}}">
+                            <p>Author: ${response.username} </p>
                         </li>
                     `;
                     $('#articles').append(output);   
                     alert('article added');   
-                    console.log(article);
+                   // console.log(photo);
                 
-            })
+            });
         }
 
 //BRISANJE CLANKA

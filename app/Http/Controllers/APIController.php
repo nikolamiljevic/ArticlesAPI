@@ -20,8 +20,11 @@ class ApiController extends Controller
     public function index()
     {
         $articles = Article::all();
-        
-       return response()->json($articles);
+        foreach ($articles as $article) {
+            $article['username'] = $article->user->name;
+        }
+        //$userName =  Article::user()->name;
+        return response()->json($articles);
     }
 
     /**
@@ -32,6 +35,8 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
+    
         $validator = Validator::make($request->all(),['title'=>'required','photo'=>"required|file|image|mimes:jpg,png,jpeg|max:5000"]);
         if ($validator->fails()) {
             //greska
@@ -56,14 +61,17 @@ class ApiController extends Controller
                 //put image in storage folder
                 Storage::disk('local')->put('public/article_images/'.$imageName,$imageEncoded);
 
+                $user = Auth::user();
+                $userName = $user->name;
             //kreiranje clanka
             $article = new Article;
             $article->title = $request->input('title');
             $article->content = $request->input('content');
             $article->photo = $imageName;
+            $article->user_id = $user->id;
             $article->save();
-            return $article;
-           // return response()->json($article);
+            //return $article;
+           return response()->json(['article' => $article, 'username' => $userName]);
         }
     }
 
@@ -105,5 +113,17 @@ class ApiController extends Controller
         $response = array('response'=>'Article deleted','success'=>true, 'id' => $id);
 
         return $response;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showArticlesByUser($id)
+    {
+        $articles = Articles::where('user_id', $id)->get();
+        return response()->json($articles);
     }
 }

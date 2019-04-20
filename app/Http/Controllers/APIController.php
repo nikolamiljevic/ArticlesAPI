@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Article;
 use App\User;
 use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ApiController extends Controller
 {
@@ -17,7 +20,8 @@ class ApiController extends Controller
     public function index()
     {
         $articles = Article::all();
-        return response()->json($articles);
+        
+       return response()->json($articles);
     }
 
     /**
@@ -28,19 +32,38 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),['title'=>'required']);
+        $validator = Validator::make($request->all(),['title'=>'required','photo'=>"required|file|image|mimes:jpg,png,jpeg|max:5000"]);
         if ($validator->fails()) {
             //greska
             $response = array('response'=>$validator->messages(), 'success'=>false);
             return $response;
         }else{
+                //ekstenzija
+                $ext = $request->file('photo')->getClientOriginalExtension(); //jpg
+                    
+                //originalno ime sa extenzijom
+                $imageOriginalName = $request->file('photo')->getClientOriginalName();
+
+                  //samo ime fajla bez ekstenzije
+                 $filename = pathinfo($imageOriginalName, PATHINFO_FILENAME);
+
+                //puno ime slike sa ekstenzijom i dodato vreme u sredini radi lakse organizacije imena
+                $imageName = $filename .'_'.time().'.'. $ext;
+
+                //stavljanje slike u promenljivu da bi mogli da je ubacimo put() metodom u Storage 
+                $imageEncoded = File::get($request->photo);
+
+                //put image in storage folder
+                Storage::disk('local')->put('public/article_images/'.$imageName,$imageEncoded);
+
             //kreiranje clanka
             $article = new Article;
             $article->title = $request->input('title');
             $article->content = $request->input('content');
+            $article->photo = $imageName;
             $article->save();
- 
-            return response()->json($article);
+            return $article;
+           // return response()->json($article);
         }
     }
 
@@ -52,7 +75,8 @@ class ApiController extends Controller
      */
     public function show($id)
     {
-        //
+        $article = Article::find($id);
+        return $article->user();
     }
 
     /**

@@ -4,7 +4,7 @@
 <h1> Profile page</h1>
 <h1>Add Article</h1>
 
-<form id="articleForm">
+<form id="articleForm" enctype="multipart/form-data">
         <div class="form-group">
             <label>Title</label>
             <input type="text" id="title" class="form-control">
@@ -12,6 +12,10 @@
         <div class="form-group">
             <label>Content</label>
             <textarea id="content" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+        <label>Photo</label><br>
+        <input type="file" id="photo" name="photo">
         </div>
         <input type="submit" value="Submit" class="btn btn-primary">
 </form>
@@ -25,6 +29,8 @@
     $(document).ready(function(){
 
         getArticles();
+
+//SVI CLANCI KORISNIKA
 
          //dobavljanje clanaka iz apija
          function getArticles(){
@@ -53,13 +59,14 @@
         }
 
 
- //DODAVANJE CLANKA
+ //DODAVANJE NOVOG CLANKA
 
         //event za dodavanje clanka
         $('#articleForm').on('submit',function(e){
             e.preventDefault();
             let title = $('#title').val();
             let content = $('#content').val();
+            
 
             addArticle(title,content);
         });
@@ -83,6 +90,7 @@
                     `;
                     $('#articles').append(output);   
                     alert('article added');   
+                    console.log(article);
                 
             })
         }

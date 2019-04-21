@@ -18,6 +18,9 @@ Route::get('/', function () {
 
 Route::resource('api/articles','ApiController');
 
+Route::post('user-articles/{id}','ApiController@showArticlesByUser');
+
+
 Route::get('articles','PagesController@allArticles');
 
 Route::get('profile','PagesController@profile')->middleware('auth');

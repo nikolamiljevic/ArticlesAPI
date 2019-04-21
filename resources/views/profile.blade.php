@@ -14,10 +14,13 @@
             <textarea id="content" name="content" class="form-control"></textarea>
         </div>
         <div class="form-group">
-        <label>Photo</label><br>
+        <label>Article cover photo</label><br>
         <input type="file" id="photo" name="photo">
-        <input type="hidden" value="">
         </div>
+        <div class="form-group">
+            <label>Photo inside article</label><br>
+            <input type="file" id="photo2" name="photo2">
+            </div>
         <input type="submit" value="Submit" class="btn btn-primary">
 </form>
 
@@ -47,13 +50,15 @@
                 $.each(articles, function(key, article){
                     
                     output+= `
-                    <li id="test${article.id}" class="list-group-item">
+                              <li id="test${article.id}" class="list-group-item">
                             <a href="/api/articles/${article.id}">    
                                 <strong>${article.title}</strong> 
                                 <p>${article.content}</p>
                             </a>
-                            <img src="{{asset('storage/article_images/${article.photo}')}}">
+                            <img style="height:200px" src="{{asset('storage/article_images/${article.photo}')}}">
                             <p>Author: ${article.username}</p>
+                            <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
+                            <button class="editLink btn btn-primary" data-id="${article.id}">Edit</button>
                         </li>
                     `;
                 });

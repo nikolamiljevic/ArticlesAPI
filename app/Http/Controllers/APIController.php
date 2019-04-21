@@ -43,6 +43,7 @@ class ApiController extends Controller
             $response = array('response'=>$validator->messages(), 'success'=>false);
             return $response;
         }else{
+            
                 //ekstenzija
                 $ext = $request->file('photo')->getClientOriginalExtension(); //jpg
                     
@@ -61,13 +62,35 @@ class ApiController extends Controller
                 //put image in storage folder
                 Storage::disk('local')->put('public/article_images/'.$imageName,$imageEncoded);
 
-                $user = Auth::user();
-                $userName = $user->name;
+                if(isset($request->file()->photo2)){
+                  //ekstenzija
+                  $ext = $request->file('photo2')->getClientOriginalExtension(); //jpg
+                    
+                  //originalno ime sa extenzijom
+                  $imageOriginalName = $request->file('photo2')->getClientOriginalName();
+  
+                    //samo ime fajla bez ekstenzije
+                   $filename = pathinfo($imageOriginalName, PATHINFO_FILENAME);
+  
+                  //puno ime slike sa ekstenzijom i dodato vreme u sredini radi lakse organizacije imena
+                  $imageName = $filename .'_'.time().'.'. $ext;
+  
+                  //stavljanje slike u promenljivu da bi mogli da je ubacimo put() metodom u Storage 
+                  $imageEncoded = File::get($request->photo);
+  
+                  //put image in storage folder
+                  Storage::disk('local')->put('public/article_images/'.$imageName,$imageEncoded);
+  
+                }
+                
+            $user = Auth::user();
+            $userName = $user->name;
             //kreiranje clanka
             $article = new Article;
             $article->title = $request->input('title');
             $article->content = $request->input('content');
             $article->photo = $imageName;
+            $article->photo2 = $imageName;
             $article->user_id = $user->id;
             $article->save();
             //return $article;
@@ -84,7 +107,7 @@ class ApiController extends Controller
     public function show($id)
     {
         $article = Article::find($id);
-        return $article->user();
+        return view('singleArticle',compact('article'));
     }
 
     /**
@@ -121,8 +144,9 @@ class ApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showArticlesByUser($id)
+    public function showArticlesByUser($id, Request $request)
     {
+        //return response()->json($request->userId);
         $articles = Articles::where('user_id', $id)->get();
         return response()->json($articles);
     }

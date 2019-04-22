@@ -29,8 +29,7 @@
                             </a>
                             <img style="height:200px" src="{{asset('storage/article_images/${article.photo}')}}">
                             <p>Author: ${article.username}</p>
-                            <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
-                            <button class="editLink btn btn-primary" data-id="${article.id}">Edit</button>
+                           
                         </li>
                         
                     `;

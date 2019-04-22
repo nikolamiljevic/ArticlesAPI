@@ -18,6 +18,12 @@
     {{-- profil create,update,delete --}}
     @yield('profile')
 
+
+    {{-- edit stranica --}}
+    @yield('edit')
+
+
+
     {{-- svi artikli bez mogucnosti editovanja i brisanja--}}
      @yield('allArticles')
 

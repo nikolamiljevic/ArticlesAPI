@@ -120,7 +120,22 @@ class ApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'title'=>'required',
+            
+            ]);
+        if ($validator->fails()) {
+
+            $response = array('response'=>$validator->messages(),'success'=>false);
+
+            return $response;
+        }else{
+            $article = Article::find($id);
+            $article->title = $request->input('title');
+            $article->content = $request->input('content');
+            $article->save();
+            return response()->json($article);
+        }
     }
 
     /**
@@ -137,6 +152,7 @@ class ApiController extends Controller
         $response = array('response'=>'Article deleted','success'=>true, 'id' => $id);
 
         return $response;
+
     }
 
     /**
@@ -146,13 +162,6 @@ class ApiController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // public function showArticlesByUser($id, Request $request)
-    // {
-    //     //return response()->json($request->userId);
-    //     $articles = Article::where('user_id', $id)->get();
-    //   //  return $articles;
-    //    return response()->json($articles);
-    // }
 
 
        public function showArticlesByUser($id)

@@ -4,6 +4,7 @@
 <h1> Profile page</h1>
 <h1>Add Article</h1>
 <input type="hidden" id="userId" value="{{$userId}}">
+
 <form id="articleForm" enctype="multipart/form-data">
         <div class="form-group">
             <label>Title</label>
@@ -34,13 +35,16 @@
 
 <script>
     $(document).ready(function(){
+
+        //dobavljanje id-ja korisnika kako bi se ubacio u url
        let userId = $('#userId').val();
        console.log(userId);
+
 //SVI CLANCI KORISNIKA
 
          //dobavljanje clanaka iz apija
  
-                getArticles();
+        getArticles();
 
         function getArticles(){
             $.ajax({
@@ -50,8 +54,6 @@
                 let output = '';
                 //izlistavanje clanaka
                 $.each(articles, function(key, article){
-               //  console.log(articles.articles.article);
-
                     output+= `
                               <li id="test${article.id}" class="list-group-item">
                             <a href="/api/articles/${article.id}">    
@@ -60,36 +62,29 @@
                             </a>
                             <img style="height:200px" src="{{asset('storage/article_images/${article.photo}')}}">
                             <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
-                            <button class="editLink btn btn-primary" data-id="${article.id}">Edit</button>
-                           
+                            <a href="edit/${article.id}"><button class="editLink btn btn-primary" data-id="${article.id}">Edit</button></a>
                         </li>
-                    `;
-                    
+                    `; 
                 });
-                
                 //dodavanje u listu
                 $('#articles').html(output);
                 
             });
         }
 
-
  //DODAVANJE NOVOG CLANKA
 
         //event za dodavanje clanka
-        $('#articleForm').on('submit',function(e){
-            e.preventDefault();
-            let title = $('#title').val();
-            let content = $('#content').val();
-          //  let photo = $('input#photo')[0].files[0]//.name;  
-         //let photo = $('#photo').prop('files')[0];    
-         var formData = new FormData(this);
-     
-//console.log(photo);
-           addArticle(title, content, formData);
-        });
+            $('#articleForm').on('submit',function(e){
+                e.preventDefault();
+                let title = $('#title').val();
+                let content = $('#content').val();
+                var formData = new FormData(this);
+        
+            addArticle(title, content, formData);
+            });
 
-             //dodavanje clanka kroz API
+        //dodavanje clanka kroz API
              function  addArticle(title, content, formData){
             $.ajax({
                 method: 'POST',
@@ -111,26 +106,23 @@
                             <p>Author: ${response.username} </p>
                         </li>
                     `;
-                    $('#articles').append(output);   
-                    alert('article added');   
-                   // console.log(photo);
-                
+                $('#articles').append(output);   
+                alert('article added');   
             });
         }
 
 //BRISANJE CLANKA
 
          //delete event
-         $('body').on('click','.deleteLink',function(e){
+             $('body').on('click','.deleteLink',function(e){
                 e.preventDefault();
             
                 let id = $(this).data('id');
                 deleteArticle(id);
-
             });
 
         //brisanje clanka kroz API
-        function deleteArticle(id){
+            function deleteArticle(id){
                 $.ajax({
                     method: 'POST',
                     url: 'http://zadatak.test/api/articles/'+id,
@@ -141,7 +133,7 @@
                 })
             }
 
-});
 
+});
 </script>
 @endsection

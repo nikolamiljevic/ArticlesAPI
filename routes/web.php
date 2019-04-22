@@ -15,15 +15,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+//rute za api kontroler
 Route::resource('api/articles','ApiController');
 
 //Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
 Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
 
+
+//stranica sa svim artiklima
 Route::get('articles','PagesController@allArticles');
 
+
+//profilna stranica sa artiklima odredjenog korisnika
 Route::get('profile','PagesController@profile')->middleware('auth');
+
+//edit stranica
+Route::get('edit/{id}','PagesController@edit');
 
 Auth::routes();
 

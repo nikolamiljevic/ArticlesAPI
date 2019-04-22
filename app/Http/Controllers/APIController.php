@@ -157,13 +157,11 @@ class ApiController extends Controller
 
        public function showArticlesByUser($id)
     {
-        //return response()->json($request->userId);
-         $userArticles = User::find($id)->article;
         
-       // $userArticles->article;
-     // foreach($userArticles as $article){
+         $userArticles = User::find($id)->article;
+      
        return response()->json($userArticles);
-     // }
+     
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
@@ -11,6 +12,7 @@ class PagesController extends Controller
     }
 
     public function profile(){
-        return view('profile');
+        $userId = Auth::user()->id;
+        return view('profile',compact('userId'));
     }
 }

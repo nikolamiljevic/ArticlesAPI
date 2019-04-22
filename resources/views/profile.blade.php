@@ -3,7 +3,7 @@
 @section('content')
 <h1> Profile page</h1>
 <h1>Add Article</h1>
-
+<input type="hidden" id="userId" value="{{$userId}}">
 <form id="articleForm" enctype="multipart/form-data">
         <div class="form-group">
             <label>Title</label>
@@ -34,47 +34,19 @@
 
 <script>
     $(document).ready(function(){
-
-        getArticles();
-
+       let userId = $('#userId').val();
+       console.log(userId);
 //SVI CLANCI KORISNIKA
 
          //dobavljanje clanaka iz apija
-        //  function getArticles(){
-        //     $.ajax({
-        //         url:'http://zadatak.test/api/articles' 
-        //     }).done(function(articles){
-        //         console.log('articles', articles);
-        //         let output = '';
-        //         //izlistavanje clanaka
-        //         $.each(articles, function(key, article){
-                 
-        //             output+= `
-        //                       <li id="test${article.id}" class="list-group-item">
-        //                     <a href="/api/articles/${article.id}">    
-        //                         <strong>${article.title}</strong> 
-        //                         <p>${article.content}</p>
-        //                     </a>
-        //                     <img style="height:200px" src="{{asset('storage/article_images/${article.photo}')}}">
-        //                     <p>Author: ${article.username}</p>
-        //                     <button class="deleteLink btn btn-danger" data-id="${article.id}">Delete</button>
-        //                     <button class="editLink btn btn-primary" data-id="${article.id}">Edit</button>
-        //                 </li>
-        //             `;
-        //         });
-                
-        //         //dodavanje u listu
-        //         $('#articles').html(output);
-                
-        //     });
-        // }
+ 
+                getArticles();
 
-//proba
         function getArticles(){
             $.ajax({
-                url:'http://zadatak.test/user-articles/1' 
+                url:'http://zadatak.test/user-articles/'+userId
             }).done(function(articles){
-                //console.log(articles);
+                
                 let output = '';
                 //izlistavanje clanaka
                 $.each(articles, function(key, article){
@@ -100,7 +72,7 @@
                 
             });
         }
-//proba kraj
+
 
  //DODAVANJE NOVOG CLANKA
 

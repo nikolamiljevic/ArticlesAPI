@@ -18,8 +18,8 @@ Route::get('/', function () {
 
 Route::resource('api/articles','ApiController');
 
-Route::post('user-articles/{id}','ApiController@showArticlesByUser');
-
+//Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
+Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
 
 Route::get('articles','PagesController@allArticles');
 

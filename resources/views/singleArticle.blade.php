@@ -11,7 +11,7 @@
 <p>Author: {{$article->user->name}}</p>
     @if(!$article->photo2)
     @else
-     <img src="{{asset('storage/article_images/'.$article->photo2)}}">
+     <img style="height:200px" src="{{asset('storage/article_images/'.$article->photo2)}}">
     @endif
 </div>
 @endsection

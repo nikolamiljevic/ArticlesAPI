@@ -20,10 +20,11 @@ class ApiController extends Controller
     public function index()
     {
         $articles = Article::all();
+       // $articles = Article::paginate(4);
         foreach ($articles as $article) {
             $article['username'] = $article->user->name;
         }
-        //$userName =  Article::user()->name;
+        //dd($articles);
         return response()->json($articles);
     }
 
@@ -144,10 +145,26 @@ class ApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showArticlesByUser($id, Request $request)
+
+    // public function showArticlesByUser($id, Request $request)
+    // {
+    //     //return response()->json($request->userId);
+    //     $articles = Article::where('user_id', $id)->get();
+    //   //  return $articles;
+    //    return response()->json($articles);
+    // }
+
+
+       public function showArticlesByUser($id)
     {
         //return response()->json($request->userId);
-        $articles = Articles::where('user_id', $id)->get();
-        return response()->json($articles);
+         $userArticles = User::find($id)->article;
+        
+       // $userArticles->article;
+     // foreach($userArticles as $article){
+       return response()->json($userArticles);
+     // }
     }
+
 }
+

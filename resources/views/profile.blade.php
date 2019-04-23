@@ -99,10 +99,10 @@
                             <a href="">
                                 <strong>${response.article.title}</strong> 
                                 <p>${response.article.content}</p>
-                                <button class="deleteLink btn btn-danger" data-id="${response.article.id}">Delete</button>
-                                <button class="editLink  btn btn-primary" data-id="${response.article.id}">Edit</button>
                             </a>
-                            <img src="{{asset('storage/article_images/${response.article.photo}')}}">
+                            <img style="height:200px" src="{{asset('storage/article_images/${response.article.photo}')}}">
+                            <button class="deleteLink btn btn-danger" data-id="${response.article.id}">Delete</button>
+                            <button class="editLink  btn btn-primary" data-id="${response.article.id}">Edit</button>
                             <p>Author: ${response.username} </p>
                         </li>
                     `;

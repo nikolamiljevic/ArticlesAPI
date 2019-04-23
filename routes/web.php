@@ -30,7 +30,7 @@ Route::get('articles','PagesController@allArticles');
 Route::get('profile','PagesController@profile')->middleware('auth');
 
 //edit stranica
-Route::get('edit/{id}','PagesController@edit');
+Route::get('edit/{id}','PagesController@edit')->middleware('auth');
 
 Auth::routes();
 

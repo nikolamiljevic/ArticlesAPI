@@ -18,8 +18,8 @@ Route::get('/', function () {
 //rute za api kontroler
 Route::resource('api/articles','ApiController');
 
-//Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
-Route::get('user-articles/{id}','ApiController@showArticlesByUser');//post
+//prikaz clanaka po korisniku na profilnoj stranici i filter na stranici sa svim artiklima
+Route::get('user-articles/{id}','ApiController@showArticlesByUser');
 
 
 //stranica sa svim artiklima

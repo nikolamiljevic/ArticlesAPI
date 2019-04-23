@@ -8,7 +8,7 @@
         @foreach($users as $user)
         <button  class="btn btn-primary" type="submit" value="{{$user->id}}">{{$user->name}}</button>
     @endforeach
-    
+    <button id="clearFilter" class="btn btn-danger">Clear filter</button>
 </div>
 <br>
 @endsection
@@ -22,7 +22,7 @@
     //dobavljanje clanaka iz apija bez mogucnosti editovanja i brisanja
          function getArticles(){
             $.ajax({
-                url:'http://zadatak.test/api/articles' 
+                url:'http://zadatak.test/api/articles'   
             }).done(function(articles){
                // console.log('articles', articles);
                 let output = '';
@@ -63,11 +63,7 @@
             
             });
             
-           //let val = $(this).val();
-            // let userId = $('#findUserArticles button').val();
-            //let userName = $('#findUserArticles button').html();
-
-
+        
 //filtriranje clanaka po korisniku
         function getArticlesByUser(userId,userName){
             $.ajax({
@@ -97,10 +93,13 @@
         }
 
 
+//event za resetovanje filtera
+        $('#clearFilter').on('click',function(e){
+            e.preventDefault();
+            getArticles();
+        });
 
-
-
-    });
+});
      </script>
 @endsection
 
